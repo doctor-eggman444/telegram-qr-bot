@@ -46,25 +46,25 @@ import sqlite3
 import threading
 
 
-BOT_TOKEN = os.environ.get("BOT_TOKEN")
-bot = telebot.TeleBot(BOT_TOKEN)
+TOKEN = os.getenv("BOT_TOKEN")  # Получаем токен из переменных окружения
+bot = telebot.TeleBot(TOKEN)
 
 app = Flask(__name__)
 
-@app.route(f"/<token>", methods=["POST"])
-def webhook(token):
-    if token != BOT_TOKEN:
-        return "Forbidden", 403
-    if request.headers.get('content-type') == 'application/json':
+@app.route("/webhook", methods=["POST"])
+def webhook():
+    if request.headers.get("content-type") == "application/json":
         json_string = request.get_data().decode("utf-8")
         update = telebot.types.Update.de_json(json_string)
         bot.process_new_updates([update])
         return '', 200
-    return 'Unsupported Media Type', 415
+    else:
+        return '', 403
 
-@app.route("/", methods=["GET"])
-def index():
-    return "Бот работает", 200
+@bot.message_handler(commands=['start'])
+def start_message(message):
+    bot.send_message(message.chat.id, "Привет! Я работаю!")
+
 ADMIN_ID = [5035760364]  # <-- ЗАМЕНИ на свой Telegram ID
 ADMIN_ID2 = 5035760364
 ADMIN_ID3 = 5035760364
@@ -6837,11 +6837,10 @@ def start_scheduler():
         scheduler.start()
 
 
-
-
 if __name__ == "__main__":
-    WEBHOOK_URL = f"https://telegram-qr-bot-9yg7.onrender.com/{BOT_TOKEN}"
+    WEBHOOK_URL = f"https://telegram-qr-bot-9yg7.onrender.com/webhook"
     bot.remove_webhook()
     bot.set_webhook(url=WEBHOOK_URL)
     print(f"✅ Вебхук установлен: {WEBHOOK_URL}")
     app.run(host="0.0.0.0", port=10000)
+
