@@ -47,8 +47,12 @@ import threading
 
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
-bot = telebot.TeleBot(BOT_TOKEN)
+if not BOT_TOKEN:
+    raise ValueError("Ошибка: переменная окружения BOT_TOKEN не установлена")
 
+WEBHOOK_URL = f"https://telegram-qr-bot-9yg7.onrender.com/{BOT_TOKEN}"
+
+bot = telebot.TeleBot(BOT_TOKEN)
 app = Flask(__name__)
 
 @app.route(f"/{BOT_TOKEN}", methods=["POST"])
@@ -60,14 +64,9 @@ def webhook():
         return '', 200
     return 'Unsupported Media Type', 415
 
-
 @app.route("/", methods=["GET"])
 def index():
     return "Бот работает", 200
-# --- Завершение планировщика (если используешь APScheduler) ---
-def shutdown_scheduler(signum, frame):
-    print("⛔ Остановка приложения...")
-    exit(0)
 ADMIN_ID = [5035760364]  # <-- ЗАМЕНИ на свой Telegram ID
 ADMIN_ID2 = 5035760364
 ADMIN_ID3 = 5035760364
@@ -6839,14 +6838,10 @@ def start_scheduler():
     if not scheduler.running:
         scheduler.start()
 
-# Установка вебхука
-def setup_webhook():
-    bot.set_webhook(url=WEBHOOK_URL)
-    print(f"✅ Вебхук установлен: {WEBHOOK_URL}")
 
-# --- Запуск ---
+
 if __name__ == "__main__":
-    WEBHOOK_URL = f"https://telegram-qr-bot-9yg7.onrender.com/{BOT_TOKEN}"
     bot.remove_webhook()
     bot.set_webhook(url=WEBHOOK_URL)
+    print("✅ Вебхук установлен")
     app.run(host="0.0.0.0", port=10000)
