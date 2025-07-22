@@ -5,3 +5,4 @@ apscheduler
 qrcode
 schedule
 aiofiles
+geopy
