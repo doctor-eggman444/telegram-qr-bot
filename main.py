@@ -48,11 +48,11 @@ from flask import Flask, request
 import sqlite3
 import threading
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
 if not BOT_TOKEN:
-    raise Exception("BOT_TOKEN не найден в переменных окружения")
+    raise ValueError("Переменная окружения BOT_TOKEN не установлена")
 
-WEBHOOK_URL = f"https://your-render-url.onrender.com/{BOT_TOKEN}"  # <-- Укажи свой Render-URL
+WEBHOOK_URL = f"https://telegram-qr-bot-9yg7.onrender.com/{BOT_TOKEN}"   # <-- Укажи свой Render-URL
 
 bot = telebot.TeleBot(BOT_TOKEN)
 app = Flask(__name__)
@@ -71,6 +71,21 @@ DB_PATH = 'cars.db'
 db_lock = threading.Lock()
 app = Flask(__name__)
 bot.add_custom_filter(custom_filters.StateFilter(bot))
+
+
+# Вебхук: обработка входящих апдейтов
+@app.route(f"/{BOT_TOKEN}", methods=['POST'])
+def webhook():
+    update = telebot.types.Update.de_json(request.data.decode('utf-8'))
+    bot.process_new_updates([update])
+    return 'ok', 200
+
+# Эндпоинт для проверки
+@app.route("/", methods=['GET'])
+def index():
+    return "Бот работает!"
+
+
 
 geolocator = Nominatim(user_agent="tolyatti_car_rental_bot", timeout=20)
 booked_slots = {}
@@ -6821,15 +6836,11 @@ def start_scheduler():
     if not scheduler.running:
         scheduler.start()
 
-@app.route(f"/{BOT_TOKEN}", methods=["POST"])
-def webhook():
-    update = telebot.types.Update.de_json(request.get_data().decode("utf-8"))
-    bot.process_new_updates([update])
-    return "OK", 200
-
-@app.route("/", methods=["GET"])
-def index():
-    return "Бот работает!"
+# Установка вебхука
+def setup_webhook():
+    bot.remove_webhook()
+    bot.set_webhook(url=WEBHOOK_URL)
+    print(f"✅ Вебхук установлен: {WEBHOOK_URL}")
 
 # --- Запуск ---
 if __name__ == "__main__":
@@ -6838,7 +6849,7 @@ if __name__ == "__main__":
 
     setup_tables()
     start_scheduler()
-
+    setup_webhook()
     bot.remove_webhook()
     bot.set_webhook(url=WEBHOOK_URL)
     print(f"✅ Webhook установлен: {WEBHOOK_URL}")
