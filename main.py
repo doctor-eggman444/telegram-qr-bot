@@ -6837,9 +6837,18 @@ def start(message):
 
    
 if __name__ == "__main__":
+    signal.signal(signal.SIGINT, shutdown_scheduler)
+    signal.signal(signal.SIGTERM, shutdown_scheduler)
+
+
+    # Настройка и запуск планировщика
+    start_scheduler()
     bot.remove_webhook()
     bot.set_webhook(url=WEBHOOK_URL)
     print(f"✅ Вебхук установлен: {WEBHOOK_URL}")
+    setup_tables()
+    print("✅ Бот запущен") 
     app.run(host="0.0.0.0", port=10000)
+   
 
 
