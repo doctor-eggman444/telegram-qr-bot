@@ -46,13 +46,19 @@ import sqlite3
 import threading
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
-if not BOT_TOKEN:
-    raise ValueError("Переменная окружения BOT_TOKEN не установлена")
-
-WEBHOOK_URL = f"https://telegram-qr-bot-9yg7.onrender.com/{BOT_TOKEN}"   # <-- Укажи свой Render-URL
-
 bot = telebot.TeleBot(BOT_TOKEN)
+WEBHOOK_PATH = f"/{BOT_TOKEN}"
+
 app = Flask(__name__)
+
+@app.route(WEBHOOK_PATH, methods=["POST"])
+def webhook():
+    if request.headers.get('content-type') == 'application/json':
+        json_string = request.get_data().decode("utf-8")
+        update = telebot.types.Update.de_json(json_string)
+        bot.process_new_updates([update])
+        return '', 200
+    return 'Unsupported Media Type', 415
 scheduler = BackgroundScheduler()
 
 
@@ -70,12 +76,6 @@ app = Flask(__name__)
 bot.add_custom_filter(custom_filters.StateFilter(bot))
 
 
-# Вебхук: обработка входящих апдейтов
-@app.route(f"/{BOT_TOKEN}", methods=['POST'])
-def webhook():
-    update = telebot.types.Update.de_json(request.data.decode('utf-8'))
-    bot.process_new_updates([update])
-    return 'ok', 200
 
 # Эндпоинт для проверки
 @app.route("/", methods=['GET'])
@@ -6852,4 +6852,4 @@ if __name__ == "__main__":
     print(f"✅ Webhook установлен: {WEBHOOK_URL}")
 
     port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    app.run()
