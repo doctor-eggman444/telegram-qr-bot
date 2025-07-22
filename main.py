@@ -7,7 +7,6 @@ import telebot
 from apscheduler.schedulers.background import BackgroundScheduler
 import signal
 import sys
-import scheduler
 import uuid
 import time
 from datetime import datetime, timedelta, date
