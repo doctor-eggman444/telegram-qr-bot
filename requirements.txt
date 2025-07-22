@@ -3,4 +3,4 @@ pyTelegramBotAPI
 gunicorn
 apscheduler
 qrcode
-shedule
+schedule
