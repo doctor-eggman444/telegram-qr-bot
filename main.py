@@ -55,8 +55,10 @@ WEBHOOK_URL = f"https://telegram-qr-bot-9yg7.onrender.com/{BOT_TOKEN}"
 bot = telebot.TeleBot(BOT_TOKEN)
 app = Flask(__name__)
 
-@app.route(f"/{BOT_TOKEN}", methods=["POST"])
-def webhook():
+@app.route("/<token>", methods=["POST"])
+def webhook(token):
+    if token != BOT_TOKEN:
+        return 'Неверный токен', 403
     if request.headers.get('content-type') == 'application/json':
         json_string = request.get_data().decode("utf-8")
         update = telebot.types.Update.de_json(json_string)
