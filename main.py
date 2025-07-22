@@ -45,30 +45,28 @@ from flask import Flask, request
 import sqlite3
 import threading
 
+
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 if not BOT_TOKEN:
-    raise ValueError("BOT_TOKEN не найден в переменных окружения")
+    raise RuntimeError("BOT_TOKEN не установлен")
 
-WEBHOOK_URL = f"https://telegram-qr-bot-9yg7.onrender.com/{BOT_TOKEN}"
-
-# --- Инициализация ---
 bot = telebot.TeleBot(BOT_TOKEN)
 app = Flask(__name__)
 
-# --- Вебхук ---
-@app.route('/webhook', methods=['POST'])
+@app.route(f"/{BOT_TOKEN}", methods=["POST"])
 def webhook():
-    print(f"BOT_TOKEN: {BOT_TOKEN}")
-    json_string = request.get_data().decode('utf-8')
-    update = telebot.types.Update.de_json(json_string)
-    bot.process_new_updates([update])
-    return 'OK', 200
+    try:
+        json_str = request.get_data().decode("utf-8")
+        update = telebot.types.Update.de_json(json_str)
+        bot.process_new_updates([update])
+        return "OK", 200
+    except Exception as e:
+        print(f"Ошибка в webhook: {e}")
+        return "Error", 500
 
-# --- Проверка —
-@app.route('/')
+@app.route("/", methods=["GET"])
 def index():
-    return "Бот запущен"
-
+    return "Бот работает", 200
 # --- Завершение планировщика (если используешь APScheduler) ---
 def shutdown_scheduler(signum, frame):
     print("⛔ Остановка приложения...")
@@ -6851,16 +6849,7 @@ def setup_webhook():
 
 # --- Запуск ---
 if __name__ == "__main__":
-    signal.signal(signal.SIGINT, shutdown_scheduler)
-    signal.signal(signal.SIGTERM, shutdown_scheduler)
-
-    # Инициализация БД и планировщика (если у тебя есть эти функции)
-    setup_tables()
-    start_scheduler()
-
-    # Устанавливаем вебхук ТОЛЬКО если явно указано
-    if os.environ.get("WEBHOOK_SETUP") == "true":
-        setup_webhook()
-
-    port = int(os.environ.get('PORT', 10000))
-    app.run(host="0.0.0.0", port=port)
+    WEBHOOK_URL = f"https://telegram-qr-bot-9yg7.onrender.com/{BOT_TOKEN}"
+    bot.remove_webhook()
+    bot.set_webhook(url=WEBHOOK_URL)
+    app.run(host="0.0.0.0", port=10000)
