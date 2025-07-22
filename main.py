@@ -93,13 +93,18 @@ session = {}
 admin_reply_targets = {}
 # --- БАЗА ДАННЫХ ---
 
-@app.route(f"/{TOKEN}", methods=['POST'])
+@app.route(f"/{BOT_TOKEN}", methods=['POST'])
 def webhook():
     json_string = request.get_data().decode('utf-8')
     update = telebot.types.Update.de_json(json_string)
     bot.process_new_updates([update])
     return '', 200
 
+@app.route("/", methods=['GET', 'POST'])
+def index():
+    bot.remove_webhook()
+    bot.set_webhook(url=f"https://telegram-qr-bot-9yg7.onrender.com/{BOT_TOKEN}")
+    return "Webhook set!", 200
 
 def get_db_connection():
     conn = sqlite3.connect('cars.db', check_same_thread=False)
@@ -6627,11 +6632,6 @@ def get_booked_dates_and_times_wash():
 
 
 # Установка webhook
-@app.route("/", methods=['GET', 'POST'])
-def index():
-    bot.remove_webhook()
-    bot.set_webhook(url=f"https://telegram-qr-bot-9yg7.onrender.com/{TOKEN}")
-    return "Webhook set!", 200
 
 # Запуск приложения
 if __name__ == "__main__":
