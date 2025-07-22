@@ -6,3 +6,4 @@ qrcode
 schedule
 aiofiles
 geopy
+pytesseract
