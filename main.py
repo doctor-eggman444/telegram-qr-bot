@@ -6847,7 +6847,6 @@ if __name__ == "__main__":
     print(f"✅ Вебхук установлен: {WEBHOOK_URL}")
     app.run(host="0.0.0.0", port=10000)
     # Настройка бота
-    bot.remove_webhook()
     setup_tables()
     print("✅ Бот запущен")
 
