@@ -6837,8 +6837,6 @@ def start(message):
 
    
 if __name__ == "__main__":
-    signal.signal(signal.SIGINT, shutdown_scheduler)
-    signal.signal(signal.SIGTERM, shutdown_scheduler)
 
     # Настройка и запуск планировщика
     start_scheduler()
@@ -6850,4 +6848,4 @@ if __name__ == "__main__":
     setup_tables()
     print("✅ Бот запущен")
 
-    shutdown_scheduler(None, None)
+
