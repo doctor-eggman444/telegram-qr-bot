@@ -4,3 +4,4 @@ gunicorn
 apscheduler
 qrcode
 schedule
+aiofiles
