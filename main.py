@@ -46,7 +46,7 @@ import sqlite3
 import threading
 
 
-BOT_TOKEN = "8049195661:AAFb9pnBNyVbluJrKpYU5d3uqwdfONjeYQE"
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
 if not BOT_TOKEN:
     raise RuntimeError("BOT_TOKEN не установлен")
 
