@@ -51,11 +51,11 @@ if not BOT_TOKEN:
 
 WEBHOOK_URL = f"https://telegram-qr-bot-9yg7.onrender.com/{BOT_TOKEN}"
 
-# Инициализация
+# --- Инициализация ---
 bot = telebot.TeleBot(BOT_TOKEN)
 app = Flask(__name__)
 
-# Обработка входящих сообщений
+# --- Вебхук ---
 @app.route(f'/{BOT_TOKEN}', methods=['POST'])
 def webhook():
     json_string = request.get_data().decode('utf-8')
@@ -63,11 +63,21 @@ def webhook():
     bot.process_new_updates([update])
     return 'OK', 200
 
-# Проверка, что бот жив
+# --- Проверка —
 @app.route('/')
 def index():
     return "Бот запущен"
-scheduler = BackgroundScheduler()
+
+# --- Установка вебхука ---
+def setup_webhook():
+    bot.remove_webhook()
+    bot.set_webhook(url=WEBHOOK_URL)
+    print(f"✅ Вебхук установлен: {WEBHOOK_URL}")
+
+# --- Завершение планировщика (если используешь APScheduler) ---
+def shutdown_scheduler(signum, frame):
+    print("⛔ Остановка приложения...")
+    exit(0)
 
 
 ADMIN_ID = [5035760364]  # <-- ЗАМЕНИ на свой Telegram ID
@@ -6851,14 +6861,14 @@ def setup_webhook():
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, shutdown_scheduler)
     signal.signal(signal.SIGTERM, shutdown_scheduler)
-    # Запуск Flask-сервера
 
+    # Инициализация БД и планировщика
     setup_tables()
     start_scheduler()
-    setup_webhook()
-    bot.remove_webhook()
-    bot.set_webhook(url=WEBHOOK_URL)
-    print(f"✅ Webhook установлен: {WEBHOOK_URL}")
+
+    # Устанавливаем вебхук ТОЛЬКО если явно указано
+    if os.environ.get("WEBHOOK_SETUP") == "true":
+        setup_webhook()
 
     port = int(os.environ.get('PORT', 10000))
     app.run(host="0.0.0.0", port=port)
