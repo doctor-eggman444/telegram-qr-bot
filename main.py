@@ -11,17 +11,7 @@ WEBHOOK_URL = f"https://{os.environ.get('RENDER_EXTERNAL_HOSTNAME')}/{BOT_TOKEN}
 bot = telebot.TeleBot(BOT_TOKEN)
 app = Flask(__name__)
 
-@app.route(f"/{BOT_TOKEN}", methods=["POST"])
-def webhook():
-    if request.headers.get('content-type') == 'application/json':
-        update = telebot.types.Update.de_json(request.get_data().decode("utf-8"))
-        bot.process_new_updates([update])
-        return '', 200
-    return 'Unsupported Media Type', 415
 
-@app.route("/", methods=["GET"])
-def index():
-    return "Бот работает!", 200
 
 ADMIN_ID = [5035760364]  # <-- ЗАМЕНИ на свой Telegram ID
 ADMIN_ID2 = 5035760364
@@ -6585,9 +6575,20 @@ def get_booked_dates_and_times_wash():
     return set(booked)
 
 
+@app.route(f"/{TOKEN}", methods=['POST'])
+def webhook():
+    json_string = request.get_data().decode('utf-8')
+    update = telebot.types.Update.de_json(json_string)
+    bot.process_new_updates([update])
+    return '', 200
 
-if __name__ == "__main__":
+# Установка webhook
+@app.route("/", methods=['GET', 'POST'])
+def index():
     bot.remove_webhook()
-    bot.set_webhook(url=WEBHOOK_URL)
-    print(f"✅ Вебхук установлен: {WEBHOOK_URL}")
-    app.run(host="0.0.0.0", port=10000)
+    bot.set_webhook(url=f"https://telegram-qr-bot-9yg7.onrender.com/{TOKEN}")
+    return "Webhook set!", 200
+
+# Запуск приложения
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
