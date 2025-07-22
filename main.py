@@ -47,22 +47,19 @@ import threading
 
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
-if not BOT_TOKEN:
-    raise RuntimeError("BOT_TOKEN не установлен")
-
 bot = telebot.TeleBot(BOT_TOKEN)
+
 app = Flask(__name__)
 
-@app.route('/8049195661:AAFb9pnBNyVbluJrKpYU5d3uqwdfONjeYQE', methods=['POST'])
+@app.route(f"/{BOT_TOKEN}", methods=["POST"])
 def webhook():
-    try:
-        json_str = request.get_data().decode("utf-8")
-        update = telebot.types.Update.de_json(json_str)
+    if request.headers.get('content-type') == 'application/json':
+        json_string = request.get_data().decode("utf-8")
+        update = telebot.types.Update.de_json(json_string)
         bot.process_new_updates([update])
-        return "OK", 200
-    except Exception as e:
-        print(f"Ошибка в webhook: {e}")
-        return "Error", 500
+        return '', 200
+    return 'Unsupported Media Type', 415
+
 
 @app.route("/", methods=["GET"])
 def index():
