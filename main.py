@@ -92,7 +92,7 @@ session = {}
 admin_reply_targets = {}
 # --- БАЗА ДАННЫХ ---
 
-@app.route(f'/{TOKEN}', methods=['POST'])
+@app.route(f'/{BOT_TOKEN}', methods=['POST'])
 def webhook():
     if request.headers.get('content-type') == 'application/json':
         json_string = request.get_data().decode('utf-8')
