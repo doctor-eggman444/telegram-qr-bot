@@ -68,18 +68,10 @@ def webhook():
 def index():
     return "Бот запущен"
 
-# --- Установка вебхука ---
-def setup_webhook():
-    bot.remove_webhook()
-    bot.set_webhook(url=WEBHOOK_URL)
-    print(f"✅ Вебхук установлен: {WEBHOOK_URL}")
-
 # --- Завершение планировщика (если используешь APScheduler) ---
 def shutdown_scheduler(signum, frame):
     print("⛔ Остановка приложения...")
     exit(0)
-
-
 ADMIN_ID = [5035760364]  # <-- ЗАМЕНИ на свой Telegram ID
 ADMIN_ID2 = 5035760364
 ADMIN_ID3 = 5035760364
@@ -6853,7 +6845,6 @@ def start_scheduler():
 
 # Установка вебхука
 def setup_webhook():
-    bot.remove_webhook()
     bot.set_webhook(url=WEBHOOK_URL)
     print(f"✅ Вебхук установлен: {WEBHOOK_URL}")
 
@@ -6862,7 +6853,7 @@ if __name__ == "__main__":
     signal.signal(signal.SIGINT, shutdown_scheduler)
     signal.signal(signal.SIGTERM, shutdown_scheduler)
 
-    # Инициализация БД и планировщика
+    # Инициализация БД и планировщика (если у тебя есть эти функции)
     setup_tables()
     start_scheduler()
 
