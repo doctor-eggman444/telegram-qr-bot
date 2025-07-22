@@ -1,4 +1,4 @@
- import os
+  import os
     from flask import Flask, request
     import telebot
     from telebot.types import Update
@@ -43,16 +43,16 @@
     from telebot.types import ReplyKeyboardMarkup, KeyboardButton
     from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
     from datetime import datetime, timedelta, date
-    import threading
+    import threading  
 
-    BOT_TOKEN = os.environ.get("BOT_TOKEN")
-    if not BOT_TOKEN:
-        raise RuntimeError("❌ BOT_TOKEN не задан")
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
+if not BOT_TOKEN:
+    raise RuntimeError("❌ BOT_TOKEN не задан")
 
-    WEBHOOK_URL = f"https://{os.environ.get('RENDER_EXTERNAL_HOSTNAME')}/{BOT_TOKEN}"
+WEBHOOK_URL = f"https://{os.environ.get('RENDER_EXTERNAL_HOSTNAME')}/{BOT_TOKEN}"
 
-    bot = telebot.TeleBot(BOT_TOKEN)
-    app = Flask(__name__)
+bot = telebot.TeleBot(BOT_TOKEN)
+app = Flask(__name__)
 
 @app.route(f"/{BOT_TOKEN}", methods=["POST"])
 def webhook():
@@ -68,7 +68,7 @@ def index():
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.reply_to(message, "Привет")
+    bot.reply_to(message, "Привет! Я бот 🚀")
 
 if __name__ == "__main__":
     bot.remove_webhook()
