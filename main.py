@@ -48,6 +48,7 @@ import threading
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 bot = telebot.TeleBot(BOT_TOKEN)
+
 app = Flask(__name__)
 
 @app.route(f"/<token>", methods=["POST"])
@@ -6834,6 +6835,7 @@ def start_scheduler():
         scheduler.add_job(send_booking_reminder, 'interval', seconds=60, id='reminder_job')
     if not scheduler.running:
         scheduler.start()
+
 
 
 
