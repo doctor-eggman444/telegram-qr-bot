@@ -28,4 +28,5 @@ if __name__ == "__main__":
     WEBHOOK_URL = "https://telegram-qr-bot-9yg7.onrender.com/webhook"
     bot.remove_webhook()
     bot.set_webhook(url=WEBHOOK_URL)
-    app.run(host="0.0.0.0", port=10000)
+    port = int(os.environ.get('PORT', 5000))  # По умолчанию 5000, но Render передаст свой порт
+    app.run(host='0.0.0.0', port=port)
