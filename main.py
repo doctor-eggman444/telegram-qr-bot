@@ -53,7 +53,7 @@ if not BOT_TOKEN:
 bot = telebot.TeleBot(BOT_TOKEN)
 app = Flask(__name__)
 
-@app.route(f"/{BOT_TOKEN}", methods=["POST"])
+@app.route('/8049195661:AAFb9pnBNyVbluJrKpYU5d3uqwdfONjeYQE', methods=['POST'])
 def webhook():
     try:
         json_str = request.get_data().decode("utf-8")
