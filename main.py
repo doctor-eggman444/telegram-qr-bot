@@ -92,6 +92,15 @@ user_car_messages = {}
 session = {}
 admin_reply_targets = {}
 # --- БАЗА ДАННЫХ ---
+
+@app.route(f"/{TOKEN}", methods=['POST'])
+def webhook():
+    json_string = request.get_data().decode('utf-8')
+    update = telebot.types.Update.de_json(json_string)
+    bot.process_new_updates([update])
+    return '', 200
+
+
 def get_db_connection():
     conn = sqlite3.connect('cars.db', check_same_thread=False)
     conn.execute("PRAGMA foreign_keys = ON")  # Включить поддержку внешних ключей
@@ -6616,12 +6625,6 @@ def get_booked_dates_and_times_wash():
     return set(booked)
 
 
-@app.route(f"/{TOKEN}", methods=['POST'])
-def webhook():
-    json_string = request.get_data().decode('utf-8')
-    update = telebot.types.Update.de_json(json_string)
-    bot.process_new_updates([update])
-    return '', 200
 
 # Установка webhook
 @app.route("/", methods=['GET', 'POST'])
