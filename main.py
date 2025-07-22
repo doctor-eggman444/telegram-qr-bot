@@ -1,49 +1,49 @@
-  import os
-    from flask import Flask, request
-    import telebot
-    from telebot.types import Update
-    from flask import Flask, request
-    import html
-    import difflib
-    import re
-    import sqlite3
-    import telebot
-    from apscheduler.schedulers.background import BackgroundScheduler
-    import signal
-    import sys
-    import uuid
-    import time
-    from datetime import datetime, timedelta, date
-    from flask import Flask
-    from telebot import custom_filters
-    from threading import Thread
-    from types import SimpleNamespace
-    import time
-    import requests
-    from telebot import TeleBot
-    from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
-    import qrcode
-    from types import SimpleNamespace
-    import locale
-    from io import BytesIO
-    import schedule
-    import urllib.parse
-    from urllib.parse import unquote
+import os
+from flask import Flask, request
+import telebot
+from telebot.types import Update
+from flask import Flask, request
+import html
+import difflib
+import re
+import sqlite3
+import telebot
+from apscheduler.schedulers.background import BackgroundScheduler
+import signal
+import sys
+import uuid
+import time
+from datetime import datetime, timedelta, date
+from flask import Flask
+from telebot import custom_filters
+from threading import Thread
+from types import SimpleNamespace
+import time
+import requests
+from telebot import TeleBot
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
+import qrcode
+from types import SimpleNamespace
+import locale
+from io import BytesIO
+import schedule
+import urllib.parse
+from urllib.parse import unquote
 
-    from aiofiles.os import remove
+from aiofiles.os import remove
 
-    from geopy.distance import geodesic
-    from telebot.apihelper import ApiTelegramException
-    from telebot import types
-    from geopy.geocoders import Nominatim
-    from geopy.exc import GeocoderTimedOut
-    import threading
-    import calendar
-    from telebot.handler_backends import State, StatesGroup
-    from telebot.types import ReplyKeyboardMarkup, KeyboardButton
-    from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
-    from datetime import datetime, timedelta, date
-    import threading  
+from geopy.distance import geodesic
+from telebot.apihelper import ApiTelegramException
+from telebot import types
+from geopy.geocoders import Nominatim
+from geopy.exc import GeocoderTimedOut
+import threading
+import calendar
+from telebot.handler_backends import State, StatesGroup
+from telebot.types import ReplyKeyboardMarkup, KeyboardButton
+from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
+from datetime import datetime, timedelta, date
+import threading  
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 if not BOT_TOKEN:
