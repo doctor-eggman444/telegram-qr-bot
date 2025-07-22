@@ -1,6 +1,8 @@
 import os
 from flask import Flask, request
 import telebot
+from telebot.types import Update
+from flask import Flask, request
 import html
 import difflib
 import re
