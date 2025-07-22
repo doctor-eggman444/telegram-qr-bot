@@ -6838,7 +6838,23 @@ def start(message):
 
 
 if __name__ == "__main__":
+   
+if __name__ == "__main__":
+    signal.signal(signal.SIGINT, shutdown_scheduler)
+    signal.signal(signal.SIGTERM, shutdown_scheduler)
+
+    # Запускаем Flask в отдельном потоке
+    Thread(target=run_flask).start()
+
+    # Настройка и запуск планировщика
+    start_scheduler()
     bot.remove_webhook()
     bot.set_webhook(url=WEBHOOK_URL)
     print(f"✅ Вебхук установлен: {WEBHOOK_URL}")
     app.run(host="0.0.0.0", port=10000)
+    # Настройка бота
+    bot.remove_webhook()
+    setup_tables()
+    print("✅ Бот запущен")
+
+    shutdown_scheduler(None, None)
