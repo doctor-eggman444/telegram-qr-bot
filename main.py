@@ -47,18 +47,13 @@ import threading
 
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
-if not BOT_TOKEN:
-    raise ValueError("Ошибка: переменная окружения BOT_TOKEN не установлена")
-
-WEBHOOK_URL = f"https://telegram-qr-bot-9yg7.onrender.com/{BOT_TOKEN}"
-
 bot = telebot.TeleBot(BOT_TOKEN)
 app = Flask(__name__)
 
-@app.route("/<token>", methods=["POST"])
+@app.route(f"/<token>", methods=["POST"])
 def webhook(token):
     if token != BOT_TOKEN:
-        return 'Неверный токен', 403
+        return "Forbidden", 403
     if request.headers.get('content-type') == 'application/json':
         json_string = request.get_data().decode("utf-8")
         update = telebot.types.Update.de_json(json_string)
@@ -6843,7 +6838,8 @@ def start_scheduler():
 
 
 if __name__ == "__main__":
+    WEBHOOK_URL = f"https://telegram-qr-bot-9yg7.onrender.com/{BOT_TOKEN}"
     bot.remove_webhook()
     bot.set_webhook(url=WEBHOOK_URL)
-    print("✅ Вебхук установлен")
+    print(f"✅ Вебхук установлен: {WEBHOOK_URL}")
     app.run(host="0.0.0.0", port=10000)
