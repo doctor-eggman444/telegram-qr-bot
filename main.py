@@ -6836,8 +6836,6 @@ def start(message):
 
 
 
-
-if __name__ == "__main__":
    
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, shutdown_scheduler)
