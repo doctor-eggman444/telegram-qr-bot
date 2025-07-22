@@ -6829,11 +6829,6 @@ def start_scheduler():
         scheduler.start()
 
 
-@bot.message_handler(commands=['start'])
-def start(message):
-    bot.reply_to(message, "Привет")
-
-
 
    
 if __name__ == "__main__":
