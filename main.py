@@ -68,7 +68,7 @@ def index():
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.reply_to(message, "Привет! Я бот 🚀")
+    bot.reply_to(message, "Привет")
 
 if __name__ == "__main__":
     bot.remove_webhook()
