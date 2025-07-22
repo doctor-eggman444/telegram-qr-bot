@@ -47,8 +47,7 @@ BOT_TOKEN = os.environ.get("BOT_TOKEN")
 if not BOT_TOKEN:
     raise RuntimeError("❌ BOT_TOKEN не задан")
 
-WEBHOOK_URL = f"https://{os.environ.get('RENDER_EXTERNAL_HOSTNAME')}/{BOT_TOKEN}"
-
+WEBHOOK_URL = f'https://telegram-qr-bot-9yg7.onrender.com/{TOKEN}'
 bot = telebot.TeleBot(BOT_TOKEN)
 app = Flask(__name__)
 
