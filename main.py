@@ -3494,7 +3494,7 @@ def admin_add_car_photo(message):
         f"<b>Год:</b> {session.get('year')}\n"
         f"<b>Коробка:</b> {session.get('transmission')}\n"
         f"<b>Тип услуги:</b> {session.get('service')}")
-    bot.send_message(message.chat.id, f"✅ Машина добавлена:\n\n{text}", parse_mode="HTML")
+    bot.send_message(message.chat.id, f"✅ Машин добавлена:\n\n{text}", parse_mode="HTML")
     bot.send_photo(message.chat.id, photo_id)
 
     # Очистка сессии
